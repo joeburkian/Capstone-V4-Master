@@ -34,6 +34,12 @@ function init() {
     if (fovCalcButton) {
         fovCalcButton.addEventListener("click", calculatePixelSize);
     }
+
+    // Sort options dropdown
+    const sortOptions = document.getElementById("sort-options");
+    if (sortOptions) {
+        sortOptions.addEventListener("change", sortCoordinates);
+    }
 }
 
 // IMAGE UPLOAD SETUP
@@ -371,7 +377,8 @@ function detectAnomalies(color) {
         }
     }
 
-    renderCoordinatesList(detectedCoords);
+    // Render the coordinates list with the default sort order
+    sortCoordinates();
     downloadAnomalyPixels(detectedCoords);
 }
 
@@ -599,10 +606,15 @@ function sortCoordinates() {
     const sortOption = document.getElementById("sort-options").value;
     let sortedCoords = [...detectedCoords];
 
-    if (sortOption === "size-asc") sortedCoords.sort((a, b) => a.size - b.size);
-    else if (sortOption === "size-desc") sortedCoords.sort((a, b) => b.size - b.size);
-    else if (sortOption === "left-to-right") sortedCoords.sort((a, b) => a.x - b.x);
-    else if (sortOption === "top-to-bottom") sortedCoords.sort((a, b) => a.y - b.y);
+    if (sortOption === "size-asc") {
+        sortedCoords.sort((a, b) => a.size - b.size);
+    } else if (sortOption === "size-desc") {
+        sortedCoords.sort((a, b) => b.size - a.size);
+    } else if (sortOption === "left-to-right") {
+        sortedCoords.sort((a, b) => a.x - b.x);
+    } else if (sortOption === "top-to-bottom") {
+        sortedCoords.sort((a, b) => a.y - b.y);
+    }
 
     renderCoordinatesList(sortedCoords);
 }
